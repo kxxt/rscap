@@ -2,6 +2,7 @@
 //!
 //!
 
+/// Information on packets generally received/dropped over a sniffing interface.
 #[derive(Clone, Debug)]
 pub struct PacketStatistics {
     pub(crate) received: u32,
@@ -9,17 +10,20 @@ pub struct PacketStatistics {
 }
 
 impl PacketStatistics {
+    /// The total number of packets received over the interface.
     #[inline]
     pub fn received(&self) -> u32 {
         self.received
     }
 
+    /// The total number of packets dropped by the sniffing device (e.g. due to full buffers).
     #[inline]
     pub fn dropped(&self) -> u32 {
         self.dropped
     }
 }
 
+/// A BPF filter program.
 #[repr(C)]
 pub struct BpfProgram {
     #[cfg(target_os = "windows")]
@@ -29,8 +33,9 @@ pub struct BpfProgram {
     bf_insns: *mut BpfInstruction,
 }
 
-#[repr(C)]
+/// Represents a single machine instruction for a BPF program.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[repr(C)]
 pub struct BpfInstruction {
     pub code: libc::c_ushort,
     pub jt: libc::c_uchar,
